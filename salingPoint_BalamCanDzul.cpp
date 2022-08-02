@@ -18,8 +18,8 @@ struct productData{//structure for product data
 	int code;	
 }products[100];
 
-int i, j, read, registerQuantity, adminChoice, adminOption, mainChoice, clientChoice, productQuantity, productCode, differentProducts, repeat, paymentMethod, paymentAmount, secondChance, exitTicket;
-float productTotal, accountTotal=0, iva, grandTotal=0, change;
+int i, j, read, registerQuantity, adminChoice, adminOption, mainChoice, clientChoice, productQuantity, productCode, differentProducts, repeat, paymentMethod, paymentAmount, secondChance, exitTicket, cashoutOption;
+float productTotal, accountTotal=0, iva, grandTotal=0, change, initialAmount = 1500.75, afterCashout, balance;
 ofstream ticket;//file for ticket
 ofstream quotation;//
 
@@ -32,6 +32,7 @@ int productSearch();
 int salingTicket();
 int saling ();
 int payment();
+int cashout();
 
 
 	
@@ -47,12 +48,14 @@ int mainMenu(){ //main interface
 	
 	if(mainChoice == 1){
 		
+		//system ("cls");//clear screen
 		system ("clear");//clear screen
 		
 		adminMode(); //admin interface
 		
 	}else if(mainChoice == 2){
 		
+		//system ("cls");
 		system ("clear");
 		
 		clientMode();//client interface
@@ -107,18 +110,21 @@ int adminMode(){//admin interface
 		
 		if(adminChoice == 1){ //enter items
 			
+			//system ("cls");
 			system ("clear");//clear screen
 			
 			dataPetition();
 				
 		}else if(adminChoice == 2){//show list of products
 			
-			system ("clear");
+			system ("cls");
+			//system ("clear");
 			
 			cout << "\n Currently there are "<< i<< " products\n"; //show the number of products
 			
 			if(i>0){
 				
+				//system ("cls");
 				system ("clear");
 				
 				cout<<"\n The products that are in the list are: \n"<<endl;
@@ -139,6 +145,7 @@ int adminMode(){//admin interface
 								
 		}else if(adminChoice == 3){//switch to client mode
 			
+			//system ("cls");
 			system ("clear");
 			
 			clientMode();
@@ -159,18 +166,21 @@ int adminMode(){//admin interface
 		
 		if(adminOption == 1){//return to admin menu
 			
+			//system ("cls");
 			system ("clear");
 			
 			return adminMode();
 			
 		}else if(adminOption == 2){//return to main menu
 			
+			//system ("cls");
 			system ("clear");
 			
 			return mainMenu();
 			
 		}else if(adminOption == 3){//switch to client mode
 			
+			//system ("cls");
 			system ("clear");
 			
 			clientMode();
@@ -209,6 +219,7 @@ int productSearch(){ //search product by code
 				
 			
 			cout<<"=======================================================================================" << endl;
+	
 		}
 		
 		if(i+1 == productCode){ //if the code is correct
@@ -279,7 +290,7 @@ int saling(){//saling interface
 				cout<<"\n Your change is "<<change;				
 				cout<<"\n Wait a moment, we are printing your ticket \n"<<endl;
 				
-			}else if(paymentAmount > grandTotal){//if the amount is equal to the total price
+			}else if(paymentAmount == grandTotal){//if the amount is equal to the total price
 				
 				cout<<"\n Wait a moment, we are printing your ticket \n"<<endl;
 				
@@ -306,24 +317,33 @@ int salingTicket(){ //print the saling ticket
 	ticket.open("ticket.txt", ios::out);//open file
 	
 	cout<<"=======================================================================================" << endl;
+	ticket<<"=======================================================================================" << endl;
 	
 	cout<<"\t\t\t\t\t SALING \t\t\t\t\t"<<endl;
+	ticket<<"\t\t\t\t\t SALING \t\t\t\t\t"<<endl;
+	
 	cout<<"\t\t\t\t      BESTIES SHOP \t\t\t\t\t"<<endl;
+	ticket<<"\t\t\t\t      BESTIES SHOP \t\t\t\t\t"<<endl;
+	
 	cout<<"\t\t\t Brianna Balam \t Javier Can \t Damaris Dzul \t"<<endl;
+	ticket<<"\t\t\t Brianna Balam \t Javier Can \t Damaris Dzul \t"<<endl;
 	
 	cout<<"\n=======================================================================================" << endl;
+	ticket<<"\n=======================================================================================" << endl;
 
-
-
-
+	cout<<"\t\t\t      Thanks for your preference  \t\t\t\t\t"<<endl;
+	ticket<<"\t\t\t      Thanks for your preference  \t\t\t\t\t"<<endl;
 
 	cout<<"\n=======================================================================================" << endl;
+	ticket<<"\n=======================================================================================" << endl;
 	
 	cout<<"\n \t\t\t\t SUBTOTAL:   "<<accountTotal<<endl;//show the total price without IVA
 	ticket<<"\n SUBTOTAL: "<<accountTotal;//write the total price without IVA in file
 	
 	
+	
 	cout<<"=======================================================================================" << endl;
+	ticket<<"\n=======================================================================================" << endl;
 	
 	cout<<"\n \t\t\t\t IVA:    "<<iva;//show IVA
 	ticket<<"\n IVA: "<<iva;//write IVA in file
@@ -335,7 +355,7 @@ int salingTicket(){ //print the saling ticket
 	ticket.close();//close file
             
     cout<<"\n=======================================================================================" << endl;
-	
+	ticket<<"\n=======================================================================================" << endl;
 }
 
 
@@ -369,56 +389,97 @@ int clientMode(){//client mode interface
 	
 }
 
-int cotization(){//cotization interface
+int cotization(){ //cotization interface
 	
-		cout<<"\n How many products do you want to quote? "<<endl;
-		cin>>differentProducts;	
+	cout<<"\n How many products do you want to quote? "<<endl;
+	cin>>differentProducts;	
 			
-		for(j=0; j<differentProducts; j++){//loop for the number of products that the client wants to quote
+	for(j=0; j<differentProducts; j++){ //loop for the number of products that the client wants to quote
 			
-			cout<<"\n Enter the code of the products that you want to quote: "<<endl;
-			cin>>productCode;
+		cout<<"\n Enter the code of the products that you want to quote: "<<endl;
+		cin>>productCode;
 			
-			cout<<"\n How many pieces do you want? "<<endl;
-			cin>>productQuantity;
+		cout<<"\n How many pieces do you want? "<<endl;
+		cin>>productQuantity;
 			
-			cout<<"=======================================================================================" << endl;
-			cout<<"  CODE  "<<"\t DESCRIPTION \t\t"<<"\t QUANTITY \t"<<"\t PRICE \t"<<endl;
-			cout<<"=======================================================================================" << endl;
+		cout<<"=======================================================================================" << endl;
+		cout<<"  CODE  "<<"\t DESCRIPTION \t\t"<<"\t QUANTITY \t"<<"\t PRICE \t"<<endl;
+		cout<<"=======================================================================================" << endl;
         	
 				
-            productSearch();//search the product in the array
+        productSearch();
             
-            cout<<"=======================================================================================" << endl;
-        }
+        cout<<"=======================================================================================" << endl;
+    }
         
-			cout<<"\n          \t\t\t\t\t\t\t SUBTOTAL:   "<<accountTotal<<endl;
-			cout<<"\n      \t\t\t\t\t\t *SUBTOTAL amount is without IVA"<<endl;
+	cout<<"\n          \t\t\t\t\t\t\t SUBTOTAL:   "<<accountTotal<<endl;
+	cout<<"\n      \t\t\t\t\t\t *SUBTOTAL amount is without IVA"<<endl;
+           
+    cout<<"\n=======================================================================================" << endl;
             
-            cout<<"\n=======================================================================================" << endl;
-            
-			cout << "\n Do you want to add more products to your quotation?"<<endl;
+	cout << "\n Do you want to add more products to your quotation?"<<endl;
 			
-			cout<<"\n Press 1 for Add more products"<<endl;
-			cout<<" Press 2 for Saling"<<endl;
-			cout<<" Press 3 for Exit"<<endl;
-			cin >> repeat;
+	cout<<"\n Press 1 for Add more products"<<endl;
+	cout<<" Press 2 for Saling"<<endl;
+	cout<<" Press 3 for Exit"<<endl;
+	cin >> repeat;
 			
-			switch (repeat)//evaluate if the user wants to add more products or if it wants to switch to saling mode
-			{
-			case 1://add more products
+	switch (repeat){ //evaluate if the user wants to add more products or if it wants to switch to saling mode			
+		
+		case 1:
 				
-				return cotization ();//return to the cotization interface
-				break;
+		return cotization (); //return to the cotization interface
+		break;
 				
-			case 2 ://saling mode
+		case 2 :
 				
-				saling();//call the saling interface
-				salingTicket();//print the saling ticket
-				break;
-			}
+		saling(); //call the saling interface
+		salingTicket(); //print the saling ticket
+		
+		cout<<"\n\n\t////////////////////////ADMIN MODE///////////////////////////////////"<<endl;
+		cout<<" Do you want to make the cashout?"<<endl;
+		cout<<" Press 1 for YES"<<endl;
+		cout<<" Press 2 for NO"<<endl;
+		cin>>cashoutOption;
+		
+		if(cashoutOption == 1){
 			
+			//system ("cls");//clear screen
+			system ("clear");//clear screen
+			
+			cashout();
+			
+		}else if(cashoutOption == 2){
+		
+		return 0;
+		
 		}
+		
+		break;
+				
+			
+		default :
+		break;
+	}
+			
+}
+
+
+int cashout(){ //cashout interface
+	
+	balance = initialAmount+grandTotal; //sum the initial amount and the grand total to calculate the day's total money
+	afterCashout = balance-grandTotal; //cashout, if after substract the balance to the grand total, then all is good xd
+	
+	cout<<"\n\n\t////////////////////////ADMIN MODE///////////////////////////////////"<<endl;
+	
+	cout<<"\n The Initial Amount was "<<initialAmount<<endl;
+	cout<<" The amount by now is "<<balance<<endl;
+	
+	cout <<"\n\t------------------------ CASHOUT ------------------------------------\n"<<endl;
+	
+	cout<<"\n The amount after the cashout is: "<<afterCashout<<endl;
+}
+
 
 int main(){//main function
 	
